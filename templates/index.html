@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Floyd–Warshall Visualizer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+  <div class="bg-grid"></div>
+  <div class="bg-glow"></div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-bracket">[</span>FW<span class="logo-bracket">]</span>
+      </div>
+      <h1 class="site-title">Floyd–Warshall <span class="accent">Visualizer</span></h1>
+      <p class="site-subtitle">All-Pairs Shortest Path · Step-by-Step Simulation</p>
+    </div>
+  </header>
+
+  <main class="main-content">
+
+    <!-- INPUT PANEL -->
+    <section class="panel input-panel" id="inputPanel">
+      <div class="panel-header">
+        <span class="panel-number">01</span>
+        <h2>Configure Graph</h2>
+      </div>
+
+      <div class="input-row">
+        <label for="vertexCount">Number of Vertices</label>
+        <div class="input-group">
+          <input type="number" id="vertexCount" min="2" max="10" value="4" placeholder="2–10" />
+          <button class="btn btn-secondary" id="buildMatrixBtn">Build Matrix</button>
+        </div>
+        <p class="hint">Enter values (use <code>INF</code> or <code>∞</code> for no direct edge)</p>
+      </div>
+
+      <div id="matrixInputContainer" class="matrix-input-container"></div>
+
+      <div class="preset-row">
+        <span class="preset-label">Presets:</span>
+        <button class="btn btn-ghost" data-preset="disconnected">Disconnected Graph</button>
+        <button class="btn btn-ghost" data-preset="dense">Dense Graph</button>
+        <button class="btn btn-ghost" data-preset="chain">Chain Graph</button>
+      </div>
+
+      <div class="action-row">
+        <button class="btn btn-primary" id="runBtn" disabled>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Run Simulation
+        </button>
+        <button class="btn btn-ghost" id="resetBtn">Reset</button>
+      </div>
+
+      <div id="errorMsg" class="error-msg" style="display:none;"></div>
+    </section>
+
+    <!-- VISUALIZATION PANEL -->
+    <section class="panel viz-panel" id="vizPanel" style="display:none;">
+      <div class="panel-header">
+        <span class="panel-number">02</span>
+        <h2>Simulation</h2>
+        <div class="step-badge" id="stepBadge">Step 0 / 0</div>
+      </div>
+
+      <div class="iteration-label" id="iterLabel">
+        <div class="iter-k" id="iterK">—</div>
+        <div class="iter-desc" id="iterDesc">Initial State</div>
+      </div>
+
+      <div class="matrix-wrapper">
+        <div id="matrixDisplay" class="matrix-display"></div>
+      </div>
+
+      <div class="legend">
+        <span class="legend-item"><span class="dot dot-changed"></span> Updated cell</span>
+        <span class="legend-item"><span class="dot dot-inf"></span> Infinity (∞)</span>
+        <span class="legend-item"><span class="dot dot-diag"></span> Diagonal (self)</span>
+      </div>
+
+      <div class="controls">
+        <button class="btn btn-ctrl" id="prevBtn" disabled>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          Previous
+        </button>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar" id="progressBar" style="width:0%"></div>
+        </div>
+        <button class="btn btn-ctrl" id="nextBtn">
+          Next
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+
+      <div class="auto-row">
+        <button class="btn btn-ghost" id="autoPlayBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Auto Play
+        </button>
+        <label class="speed-label">Speed
+          <input type="range" id="speedSlider" min="300" max="2000" value="900" step="100" />
+        </label>
+      </div>
+
+      <div id="negativeCycleWarning" class="negative-cycle-warning" style="display:none;">
+        ⚠️ Negative cycle detected — shortest paths are undefined for some vertex pairs.
+      </div>
+
+      <div class="changes-log" id="changesLog"></div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    Floyd–Warshall O(V³) · All-Pairs Shortest Path
+  </footer>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
